@@ -215,6 +215,6 @@ app.delete("/delete/:id", (req, res) => {
   });
 });
 
-app.listen(8800, () => {
-  console.log("서버 연결 O");
+app.listen(8000, () => {
+  console.log("서버 연결 O : 8000");
 });
