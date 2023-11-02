@@ -79,7 +79,6 @@ app.post("/login", (req, res) => {
       if (req.session.user) {
         console.log("유저정보 있음.");
       } else {
-        // req.session.user = data[0];
         req.session.user = {
           userId: userId,
           pw: pw,
@@ -127,10 +126,9 @@ app.post(
     { name: "img5", limits: 1 },
   ]),
   (req, res, next) => {
-    console.log("body >>>", req.body);
-    console.log("file >>>", req.files);
-    console.log("file path >>>", req.files["thumb"][0].originalname);
-    // res.send("upload >> " + req.files.originalname);
+    // console.log("body >>>", req.body);
+    // console.log("file >>>", req.files);
+    // console.log("file path >>>", req.files["thumb"][0].originalname);
 
     //필수입력 이미지(thumb, img1) 외 값없는거 null 처리
     if (!Object.keys(req.files).includes("img2")) {
@@ -173,7 +171,6 @@ app.post(
 //프로젝트 텍스트 불러오기
 //(update page > input에 텍스트 미리 들어가있는 부분)
 app.get("/getTexts/:id", (req, res) => {
-  console.log("들어와?");
   const projectId = req.params.id;
   const q = "select * from projects where id = ?";
   db.query(q, projectId, (err, data) => {
@@ -184,7 +181,6 @@ app.get("/getTexts/:id", (req, res) => {
 
 // 10/19 update2.js (프로젝트 수정)
 app.put("/update/:id", (req, res) => {
-  console.log("update", req.body);
   const projectId = req.params.id;
   const q =
     "update projects set `title` = ?, `date` = ?, `introduction`  = ?, `category` = ?, `skill` = ?, `view` = ?, `git` = ?, `readmore` = ?, `subTitle` =? where id =?";
@@ -217,4 +213,8 @@ app.delete("/delete/:id", (req, res) => {
 
 app.listen(8000, () => {
   console.log("서버 연결 O : 8000");
+});
+
+app.get("/", (req, res) => {
+  res.send("포트폴리오 서버 접속 완료");
 });
