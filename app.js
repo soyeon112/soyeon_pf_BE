@@ -65,6 +65,12 @@ app.post("/login", (req, res) => {
   console.log("전달된 로그인 정보: ", userId, pw);
   console.log("login session : ", res.session);
 
+  if (userID == "admin" && pw == "soadmin112") {
+    return res.send("유저 정보 생성 테스트 ");
+  } else {
+    console.log("로그인 정보 안맞음");
+  }
+  /*
   const q = "select * from user where userId = ? and pw=?";
   db.query(q, [userId, pw], (err, data) => {
     if (err) {
@@ -91,6 +97,7 @@ app.post("/login", (req, res) => {
       console.log("로그인 실패");
     }
   });
+  */
 });
 
 //관리자 로그아웃
@@ -218,3 +225,10 @@ app.listen(8000, () => {
 app.get("/", (req, res) => {
   res.send("포트폴리오 서버 접속 완료");
 });
+
+let corsOptions = {
+  origin: "https://web-soyeon-pf-fe-12fhqa2llodtr1bj.sel5.cloudtype.app/", // 출처 허용 옵션
+  credentials: true, // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+};
+
+app.use(cors(corsOptions));
