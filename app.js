@@ -48,7 +48,7 @@ const db = mysql.createConnection({
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_URL, process.env.FE_URL],
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   })
