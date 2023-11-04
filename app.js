@@ -215,7 +215,7 @@ app.listen(8000, () => {
   console.log("서버 연결 O : 8000");
 });
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.send("포트폴리오 서버 접속 완료");
   if (res.err) return res.json(err);
 });
