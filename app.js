@@ -5,6 +5,7 @@ import session from "express-session";
 import multer from "multer";
 import dotenv from "dotenv";
 import http from "http";
+
 //.env
 dotenv.config();
 
@@ -50,16 +51,16 @@ var corsOptions = {
   optionsSuccessStatus: 200,
 };
 //cors
-app.use(
-  cors({
-    origin: [process.env.BE_URL, process.env.FE_URL],
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    preflightContinue: false,
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
-
+// app.use(
+//   cors({
+//     origin: [process.env.BE_URL, process.env.FE_URL],
+//     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+//     preflightContinue: false,
+//     optionsSuccessStatus: 200,
+//     credentials: true,
+//   })
+// );
+app.use(cors());
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
   console.log("/session", req.session);
