@@ -46,7 +46,7 @@ const db = mysql.createConnection({
 });
 
 //세션 유무 확인
-app.get("/session", (req, res) => {
+app.get("/api/session", (req, res) => {
   console.log("/session", req.session);
   if (req.session.user) {
     console.log("session api : ", req.session.user);
@@ -58,7 +58,7 @@ app.get("/session", (req, res) => {
 });
 
 //관리자 로그인
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
   const userId = req.body.userId;
   const pw = req.body.pw;
 
@@ -94,7 +94,7 @@ app.post("/login", (req, res) => {
 });
 
 //관리자 로그아웃
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   let session = req.session;
   console.log("로그아웃 - 세션정보", session);
   if (req.session.user) {
@@ -104,7 +104,7 @@ app.post("/logout", (req, res) => {
 });
 
 //프로젝트 리스트업 (projects page)
-app.get("/projects", (req, res) => {
+app.get("/api/projects", (req, res) => {
   const q = "select *  from projects";
   db.query(q, (err, data) => {
     if (err) return res.json(err);
@@ -112,11 +112,11 @@ app.get("/projects", (req, res) => {
   });
 });
 
-app.use("/image", express.static("uploads"));
+app.use("/api/image", express.static("uploads"));
 
 //프로젝트 추가
 app.post(
-  "/add/project",
+  "/api/add/project",
   upload.fields([
     { name: "thumb", limits: 1 }, // limits:1 >> 이미지 1개까지만 첨부 가능
     { name: "img1", limits: 1 },
@@ -170,7 +170,7 @@ app.post(
 
 //프로젝트 텍스트 불러오기
 //(update page > input에 텍스트 미리 들어가있는 부분)
-app.get("/getTexts/:id", (req, res) => {
+app.get("/api/getTexts/:id", (req, res) => {
   const projectId = req.params.id;
   const q = "select * from projects where id = ?";
   db.query(q, projectId, (err, data) => {
@@ -180,7 +180,7 @@ app.get("/getTexts/:id", (req, res) => {
 });
 
 // 10/19 update2.js (프로젝트 수정)
-app.put("/update/:id", (req, res) => {
+app.put("/api/update/:id", (req, res) => {
   const projectId = req.params.id;
   const q =
     "update projects set `title` = ?, `date` = ?, `introduction`  = ?, `category` = ?, `skill` = ?, `view` = ?, `git` = ?, `readmore` = ?, `subTitle` =? where id =?";
@@ -202,7 +202,7 @@ app.put("/update/:id", (req, res) => {
 });
 
 //프로젝트 삭제
-app.delete("/delete/:id", (req, res) => {
+app.delete("/api/delete/:id", (req, res) => {
   const projectId = req.params.id;
   const q = "delete from projects where id = ?";
   db.query(q, [projectId], (err, data) => {
@@ -215,6 +215,7 @@ app.listen(8000, () => {
   console.log("서버 연결 O : 8000");
 });
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("포트폴리오 서버 접속 완료");
+  if (res.err) return res.json(err);
 });
