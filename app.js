@@ -45,17 +45,21 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-let corsOptions = {
-  origin: [process.env.BE_URL, process.env.FE_URL, "http://localhost:8000"],
-  credentials: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
+app.use((req, res, next) => {
+  const corsWhitelist = [
+    process.env.BE_URL,
+    process.env.FE_URL,
+    "http://localhost:8000",
+  ];
+  if (corsWhitelist.indexOf(req.headers.origin) !== -1) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+  }
+  next();
+});
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
   console.log("/session", req.session);
