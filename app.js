@@ -28,7 +28,7 @@ const app = express();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_URL, DNS],
+    origin: [process.env.BE_URL, process.env.DNS],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
