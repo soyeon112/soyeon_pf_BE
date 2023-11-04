@@ -45,7 +45,6 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-const cors = require("cors");
 app.use(
   cors({
     origin: [
