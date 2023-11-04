@@ -45,45 +45,19 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-//http
-
-http.createServer(function (req, res) {
-  // Setting up Headers
-  res.setHeader("Access-Control-Allow-origin", [
-    process.env.BE_URL,
-    process.env.FE_URL,
-  ]); // 모든 출처(orogin)을 허용
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  ); // 모든 HTTP 메서드 허용
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // 클라이언트와 서버 간에 쿠키 주고받기 허용
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    " Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization"
-  );
-  res.setHeader("Access-Control-Max-Age", "60");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  res.writeHead(200, {
-    "Content-Type": [
-      "Application/x-www.-form-urlencoded",
-      "text/plain",
-      "multipart/form-data",
-    ],
-  });
-  res.end("ok");
-});
-
+var corsOptions = {
+  origin: [process.env.BE_URL, process.env.FE_URL],
+  optionsSuccessStatus: 200,
+};
 //cors
-app.use(
-  cors({
-    origin: [process.env.BE_URL, process.env.FE_URL],
-    methods: ["GET", "POST"],
-    credentials: true,
-    optionsSuccessStatus: 200, // 응답 상태 200으로 설정
-  })
-);
+// app.use(
+//   cors({
+//     origin: [process.env.BE_URL, process.env.FE_URL],
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//     optionsSuccessStatus: 200, // 응답 상태 200으로 설정
+//   })
+// );
 
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
@@ -98,7 +72,7 @@ app.get("/api/session", (req, res) => {
 });
 
 //관리자 로그인
-app.post("/api/login", (req, res) => {
+app.post("/api/login", cors(corsOptions), (req, res) => {
   const userId = req.body.userId;
   const pw = req.body.pw;
 
