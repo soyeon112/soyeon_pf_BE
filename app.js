@@ -25,7 +25,8 @@ const upload = multer({ storage: _storage }); //미들웨어 리턴
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+
 // Use the session middleware
 var hour = 3600000;
 app.use(
@@ -51,16 +52,16 @@ var corsOptions = {
   optionsSuccessStatus: 200,
 };
 //cors
-// app.use(
-//   cors({
-//     origin: [process.env.BE_URL, process.env.FE_URL],
-//     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-//     preflightContinue: false,
-//     optionsSuccessStatus: 200,
-//     credentials: true,
-//   })
-// );
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.BE_URL, process.env.FE_URL],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
+
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
   console.log("/session", req.session);
