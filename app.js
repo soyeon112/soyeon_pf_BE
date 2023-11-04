@@ -50,14 +50,15 @@ var corsOptions = {
   optionsSuccessStatus: 200,
 };
 //cors
-// app.use(
-//   cors({
-//     origin: [process.env.BE_URL, process.env.FE_URL],
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//     optionsSuccessStatus: 200, // 응답 상태 200으로 설정
-//   })
-// );
+app.use(
+  cors({
+    origin: [process.env.BE_URL, process.env.FE_URL],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
 
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
@@ -72,7 +73,7 @@ app.get("/api/session", (req, res) => {
 });
 
 //관리자 로그인
-app.post("/api/login", cors(corsOptions), (req, res) => {
+app.post("/api/login", (req, res) => {
   const userId = req.body.userId;
   const pw = req.body.pw;
 
@@ -231,5 +232,6 @@ app.listen(8000, () => {
 
 app.get("/", (req, res) => {
   res.send("포트폴리오 서버 접속 완료");
+  console.log("포폴서버");
   if (res.err) return res.json(err);
 });
