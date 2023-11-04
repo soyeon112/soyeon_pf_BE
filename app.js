@@ -45,19 +45,16 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-app.use(
-  cors({
-    origin: [
-      "https://port-0-soyeon-pf-be-12fhqa2llodtr1bj.sel5.cloudtype.app/",
-      "https://web-soyeon-pf-fe-12fhqa2llodtr1bj.sel5.cloudtype.app/",
-      "http://localhost:8000",
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,USE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    credentials: true,
-  })
-);
+let corsOptions = {
+  origin: [
+    "https://port-0-soyeon-pf-be-12fhqa2llodtr1bj.sel5.cloudtype.app",
+    "https://web-soyeon-pf-fe-12fhqa2llodtr1bj.sel5.cloudtype.app",
+    "http://localhost:8000",
+  ],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
