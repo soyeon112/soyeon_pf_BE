@@ -46,11 +46,11 @@ const db = mysql.createConnection({
 });
 
 let corsOptions = {
-  origin: [
-    "https://port-0-soyeon-pf-be-12fhqa2llodtr1bj.sel5.cloudtype.app",
-    "https://web-soyeon-pf-fe-12fhqa2llodtr1bj.sel5.cloudtype.app",
-    "http://localhost:8000",
-  ],
+  origin: [process.env.BE_URL, process.env.FE_URL, "http://localhost:8000"],
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
   credentials: true,
 };
 
