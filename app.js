@@ -58,11 +58,10 @@ app.use(
     cookie: {
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      // httpOnly: true,
-      // sameSite: "none",
-      // domain: ".soyeon-portfolio",
-      // domain: "localhost",
-      // secure: true,
+      httpOnly: true,
+      sameSite: "none",
+      domain: ".soyeon-portfolio",
+      secure: true,
     },
   })
 );
