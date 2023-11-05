@@ -44,16 +44,17 @@ app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET,
+    proxy: true,
     cookie: {
       httpOnly: true,
       sameSite: "strict",
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      // domain: ".localhost:3000",
-      secure: false,
+      domain: ".soyeon-portfolio.site",
+      secure: true,
     },
   })
 );
