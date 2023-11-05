@@ -50,7 +50,7 @@ app.use(
     proxy: true,
     cookie: {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
       domain: ".soyeon-portfolio.site",
