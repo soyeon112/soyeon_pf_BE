@@ -46,9 +46,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     cookie: { expires: new Date(Date.now() + hour), maxAge: 100 * hour },
     resave: false,
+    domain: ".soyeon-portfolio.site",
     saveUninitialized: true,
   })
 );
+app.set("trust proxy", 1);
 
 app.use(express.urlencoded({ extended: true }));
 
