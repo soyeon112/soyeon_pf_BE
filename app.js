@@ -109,10 +109,10 @@ app.post("/api/login", (req, res) => {
 
 //관리자 로그아웃
 app.post("/api/logout", (req, res) => {
-  let session = req.session;
-  console.log("로그아웃 - 세션정보", session);
+  console.log("로그아웃 - 세션정보", req.session);
   if (req.session.user) {
     req.session.destroy();
+    console.log("로그아웃 -  삭제됨?", req.session);
   }
   return res.send("로그아웃 되었습니다.");
 });
