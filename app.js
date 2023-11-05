@@ -14,7 +14,12 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_URL, process.env.FE_URL, process.env.DNS],
+    origin: [
+      "http://localhost:3000",
+      process.env.BE_URL,
+      process.env.FE_URL,
+      process.env.DNS,
+    ],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -38,23 +43,25 @@ const upload = multer({ storage: _storage }); //미들웨어 리턴
 
 app.use(express.json());
 
-// Use the session middleware
+app.use(cookieParser());
+
+//session 설정
 var hour = 3600000;
 app.set("trust proxy", 1);
-app.use(cookieParser());
 app.use(
   session({
+    name: "session ID",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET,
     proxy: true,
     cookie: {
-      httpOnly: true,
-      sameSite: "none",
+      httpOnly: false,
+      // sameSite: "none",
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      domain: ".soyeon-portfolio.site",
-      secure: true,
+      // domain: ".port-0-soyeon-pf-be-12fhqa2llodtr1bj.sel5.cloudtype.app",
+      secure: false,
     },
   })
 );
@@ -70,7 +77,10 @@ const db = mysql.createConnection({
 
 //세션 유무 확인
 app.get("/api/session", (req, res) => {
-  console.log("/session", req.session);
+  // res.status(200).json("session information");
+
+  console.log("session info", req.session);
+
   if (req.session.user) {
     console.log("session api : ", req.session.user);
     res.send(req.session.user);
@@ -80,13 +90,22 @@ app.get("/api/session", (req, res) => {
   }
 });
 
+//로그인 성공 여부 확인
+app.get("/api/login/success", (req, res) => {
+  try {
+    const data = req.session;
+    res.status(200).json(data);
+    console.log("login/success", data);
+  } catch (err) {
+    res.status(403).json("user not found");
+  }
+});
+
 //관리자 로그인
 app.post("/api/login", (req, res) => {
+  //전달 받은 id, pw 변수 저장
   const userId = req.body.userId;
   const pw = req.body.pw;
-
-  console.log("전달된 로그인 정보: ", userId, pw);
-  console.log("login session : ", res.session);
 
   const q = "select * from user where userId = ? and pw=?";
   db.query(q, [userId, pw], (err, data) => {
@@ -95,21 +114,33 @@ app.post("/api/login", (req, res) => {
       return res.json("Error");
     }
 
-    if (data.length > 0) {
+    console.log(Boolean(data));
+    if (data) {
       console.log("로그인 성공");
 
       //유저 정보 있는지 확인 후 없으면 세션에 추가
-      if (req.session.user) {
-        console.log("유저정보 있음.");
-      } else {
+      // if (req.session.user) {
+      //   console.log("유저정보 있음.");
+      // } else {
+      //   req.session.user = {
+      //     userId: userId,
+      //     pw: pw,
+      //     name: data[0].name,
+      //   };
+      //   console.log(req.session);
+      //   return res.send("유저정보 세션 생성O");
+      // }
+
+      //11.05 session 생성
+      req.session.save(() => {
         req.session.user = {
           userId: userId,
           pw: pw,
           name: data[0].name,
         };
-        console.log(req.session);
-        return res.send("유저정보 세션 생성O");
-      }
+        const session_data = req.session;
+        res.status(200).json({ session_data });
+      });
     } else {
       console.log("로그인 실패");
     }
@@ -119,12 +150,18 @@ app.post("/api/login", (req, res) => {
 //관리자 로그아웃
 app.post("/api/logout", (req, res) => {
   console.log("로그아웃 - 세션정보", req.session);
-  req.session.destroy();
+
   // if (req.session.user) {
   //   req.session.destroy();
   //   console.log("로그아웃 -  삭제됨?", req.session);
   // }
-  return res.send("로그아웃 되었습니다.");
+
+  //11.05 session 삭제
+  req.session.destroy(() => {
+    console.log("api/logout > ", req.session);
+    res.status(200).json({ messge: "logout success" });
+  });
+  // return res.send("로그아웃 되었습니다.");
 });
 
 //프로젝트 리스트업 (projects page)
@@ -241,6 +278,9 @@ app.listen(8000, () => {
 
 app.get("/", (req, res) => {
   res.send("포트폴리오 서버 접속 완료");
-  console.log("포폴서버");
-  if (res.err) return res.json(err);
+  try {
+    console.log("session info : ", req.session);
+  } catch (err) {
+    console.log(err);
+  }
 });
