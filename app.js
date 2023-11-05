@@ -5,9 +5,22 @@ import session from "express-session";
 import multer from "multer";
 import dotenv from "dotenv";
 import http from "http";
+import cookieParser from "cookie-parser";
 
+const app = express();
 //.env
 dotenv.config();
+
+//cors
+app.use(
+  cors({
+    origin: [process.env.BE_URL, process.env.FE_URL, process.env.DNS],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
 
 const _storage = multer.diskStorage({
   //프론트에서 formdata로 보낸 이미지 어디에 저장?
@@ -23,34 +36,27 @@ const _storage = multer.diskStorage({
 
 const upload = multer({ storage: _storage }); //미들웨어 리턴
 
-const app = express();
-
-//cors
-app.use(
-  cors({
-    origin: [process.env.BE_URL, process.env.FE_URL, process.env.DNS],
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    preflightContinue: false,
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
-
 app.use(express.json());
-// app.use(cors());
 
 // Use the session middleware
 var hour = 3600000;
+app.set("trust proxy", 1);
+app.use(cookieParser());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    cookie: { expires: new Date(Date.now() + hour), maxAge: 100 * hour },
     resave: false,
-    domain: ".soyeon-portfolio.site",
     saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      sameSite: "strict",
+      expires: new Date(Date.now() + hour),
+      maxAge: 100 * hour,
+      // domain: ".localhost:3000",
+      secure: false,
+    },
   })
 );
-app.set("trust proxy", 1);
 
 app.use(express.urlencoded({ extended: true }));
 
