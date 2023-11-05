@@ -56,12 +56,12 @@ app.use(
     saveUninitialized: false,
     proxy: true,
     cookie: {
-      httpOnly: false,
-      // sameSite: "none",
+      httpOnly: true,
+      sameSite: "none",
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
       // domain: ".port-0-soyeon-pf-be-12fhqa2llodtr1bj.sel5.cloudtype.app",
-      secure: false,
+      secure: true,
     },
   })
 );
