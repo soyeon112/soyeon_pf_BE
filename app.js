@@ -45,7 +45,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     cookie: { expires: new Date(Date.now() + hour), maxAge: 100 * hour },
-    resave: true,
+    resave: false,
     saveUninitialized: true,
   })
 );
