@@ -140,11 +140,6 @@ app.post("/api/login", (req, res) => {
         };
         const session_data = req.session;
         res.status(200).json({ session_data });
-        res.cookie("session ID", token, {
-          httpOnly: true,
-          sameSite: "none",
-          secure: true,
-        });
       });
     } else {
       console.log("로그인 실패");
