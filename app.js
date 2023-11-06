@@ -14,12 +14,7 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      process.env.BE_URL,
-      process.env.FE_URL,
-      process.env.DNS,
-    ],
+    origin: [process.env.BE_URL, process.env.FE_URL, process.env.DNS],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -60,7 +55,7 @@ app.use(
       maxAge: 100 * hour,
       httpOnly: true,
       sameSite: "none",
-      domain: ".soyeon-portfolio.site",
+      domain: `.cloudtype.app`,
       secure: true,
     },
   })
@@ -136,7 +131,7 @@ app.post("/api/login", (req, res) => {
         req.session.user = {
           userId: userId,
           pw: pw,
-          name: data[0].name,
+          // name: data[0].name,
         };
         const session_data = req.session;
         res.status(200).json({ session_data });
