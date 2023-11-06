@@ -139,9 +139,7 @@ app.post("/api/login", (req, res) => {
         const session_data = req.session;
         console.log("req.session", req.session);
         console.log("session_data", session_data);
-        res.status(200);
-
-        console.log("로그인 후 세션 정보", req.session);
+        res.status(200).json({ session_data });
       });
     } else {
       console.log("로그인 실패");
