@@ -110,6 +110,7 @@ app.post("/api/login", (req, res) => {
     }
 
     console.log(Boolean(data));
+    console.log("성공했다고? 뭐가 들어있는데", data);
     if (data) {
       console.log("로그인 성공");
 
@@ -128,12 +129,16 @@ app.post("/api/login", (req, res) => {
 
       //11.05 session 생성
       req.session.save(() => {
+        console.log("세이브 되고 있음?");
         req.session.user = {
           userId: userId,
           pw: pw,
           // name: data[0].name,
         };
+        console.log("////??", req.session);
         const session_data = req.session;
+        console.log("req.session", req.session);
+        console.log("session_data", session_data);
         res.status(200).json({ session_data });
       });
     } else {
