@@ -60,7 +60,7 @@ app.use(
       maxAge: 100 * hour,
       httpOnly: true,
       sameSite: "none",
-      // domain: ".soyeon-portfolio.site",
+      domain: ".soyeon-portfolio.site",
       secure: true,
     },
   })
