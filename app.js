@@ -14,7 +14,7 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_URL, process.env.FE_URL, process.env.DNS],
+    origin: [process.env.BE_DNS, process.env.DNS],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -55,7 +55,7 @@ app.use(
       maxAge: 100 * hour,
       httpOnly: true,
       sameSite: "none",
-      domain: `.cloudtype.app`,
+      domain: `.soyeon-portfolio.site`,
       secure: true,
     },
   })
@@ -139,7 +139,7 @@ app.post("/api/login", (req, res) => {
         const session_data = req.session;
         console.log("req.session", req.session);
         console.log("session_data", session_data);
-        res.status(200).json({ session_data });
+        return res.status(200).json({ session_data });
       });
     } else {
       console.log("로그인 실패");
