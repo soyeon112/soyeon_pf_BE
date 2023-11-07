@@ -14,7 +14,7 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_DNS, process.env.DNS],
+    origin: [process.env.BE_DNS, process.env.FE_DNS],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -53,7 +53,7 @@ app.use(
     cookie: {
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      httpOnly: true,
+      // httpOnly: true,
       sameSite: "none",
       domain: `.soyeon-portfolio.site`,
       secure: true,
@@ -235,6 +235,7 @@ app.get("/api/getTexts/:id", (req, res) => {
   const projectId = req.params.id;
   const q = "select * from projects where id = ?";
   db.query(q, projectId, (err, data) => {
+    console.log("성공했다고? 뭐가 들어있는데", data);
     if (err) return res.json(err);
     return res.json(data);
   });
