@@ -6,6 +6,7 @@ import multer from "multer";
 import dotenv from "dotenv";
 import http from "http";
 import cookieParser from "cookie-parser";
+import { resourceLimits } from "worker_threads";
 
 const app = express();
 //.env
@@ -53,7 +54,7 @@ app.use(
     cookie: {
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      // httpOnly: true,
+      httpOnly: true,
       sameSite: "none",
       domain: `.soyeon-portfolio.site`,
       secure: true,
@@ -99,8 +100,8 @@ app.get("/api/login/success", (req, res) => {
 //관리자 로그인
 app.post("/api/login", (req, res) => {
   //전달 받은 id, pw 변수 저장
-  const userId = req.body.userId;
-  const pw = req.body.pw;
+  const userId = req.body.data.userId;
+  const pw = req.body.data.pw;
 
   const q = "select * from user where userId = ? and pw=?";
   db.query(q, [userId, pw], (err, data) => {
@@ -109,40 +110,25 @@ app.post("/api/login", (req, res) => {
       return res.json("Error");
     }
 
-    console.log(Boolean(data));
-    console.log("성공했다고? 뭐가 들어있는데", data);
-    if (data) {
-      console.log("로그인 성공");
+    console.log(data[0] != undefined);
+    // console.log(data.userId != undefined);
 
-      //유저 정보 있는지 확인 후 없으면 세션에 추가
-      // if (req.session.user) {
-      //   console.log("유저정보 있음.");
-      // } else {
-      //   req.session.user = {
-      //     userId: userId,
-      //     pw: pw,
-      //     name: data[0].name,
-      //   };
-      //   console.log(req.session);
-      //   return res.send("유저정보 세션 생성O");
-      // }
+    if (data[0] != undefined) {
+      console.log("로그인 성공");
 
       //11.05 session 생성
       req.session.save(() => {
-        console.log("세이브 되고 있음?");
         req.session.user = {
           userId: userId,
           pw: pw,
-          // name: data[0].name,
+          name: data[0].name,
         };
-        console.log("////??", req.session);
         const session_data = req.session;
-        console.log("req.session", req.session);
-        console.log("session_data", session_data);
+
         return res.status(200).json({ session_data });
       });
     } else {
-      console.log("로그인 실패");
+      return res.status(204).json({ message: "로그인 실패" });
     }
   });
 });
@@ -235,7 +221,6 @@ app.get("/api/getTexts/:id", (req, res) => {
   const projectId = req.params.id;
   const q = "select * from projects where id = ?";
   db.query(q, projectId, (err, data) => {
-    console.log("성공했다고? 뭐가 들어있는데", data);
     if (err) return res.json(err);
     return res.json(data);
   });
