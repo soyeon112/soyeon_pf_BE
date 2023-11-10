@@ -124,7 +124,7 @@ app.post("/api/login", (req, res) => {
           name: data[0].name,
         };
         const session_data = req.session;
-
+        console.log(session_data);
         return res.status(200).json({ session_data });
       });
     } else {
