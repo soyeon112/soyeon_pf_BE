@@ -50,13 +50,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     cookie: {
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      // httpOnly: true,
       sameSite: "none",
-      domain: `.soyeon-portfolio.site`,
+      domain: ".soyeon-portfolio.site",
       secure: false,
     },
   })
