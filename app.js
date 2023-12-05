@@ -15,7 +15,8 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_DNS, process.env.FE_DNS],
+    // origin: [process.env.BE_DNS, process.env.FE_DNS],
+    origin: process.env.DOMAIN,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -53,9 +54,9 @@ app.use(
     cookie: {
       expires: new Date(Date.now() + hour),
       maxAge: 100 * hour,
-      sameSite: "none",
-      domain: ".soyeon-portfolio.site",
-      secure: false,
+      // sameSite: "none",
+      // domain: ".soyeon-portfolio.site",
+      // secure: false,
     },
   })
 );
