@@ -15,11 +15,12 @@ dotenv.config();
 //cors
 app.use(
   cors({
-    origin: [process.env.BE_DNS, process.env.FE_DNS],
+    // origin: [process.env.BE_DNS, process.env.FE_DNS],
+    origin: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 200,
-    credentials: true,
+    // credentials: true,
   })
 );
 
